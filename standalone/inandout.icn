@@ -1,0 +1,12 @@
+procedure somefunction(text)
+	write(text,"m16")
+end
+
+procedure main()
+	text := open("hahaha.txt", "c") | stop("something is broken")
+	write(text,"yoyo")
+	
+	somefunction(text)
+	
+	write(text,"hola")
+end

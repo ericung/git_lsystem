@@ -1,0 +1,67 @@
+link graphics
+
+record rpoint(x,y,px,py)
+
+$define Width	800
+$define Height	800
+$define origin_x	Width / 2
+$define origin_y	Height / 2
+
+procedure processTree(x,y,glength, gfactor, perp, datalist, iter, outputfile)
+	returndata := []
+	
+	if iter <= *datalist then {
+		ele := datalist[iter]
+		rvalue := (&pi) / (ele + 1)
+		every i := 1 to ele do {
+			rtemp := rvalue * i + perp
+			rx := x + glength * cos(rtemp)
+			ry := y - glength * sin(rtemp)
+			
+			write(outputfile, x || " " || y || " -> " || rx || " " || ry || " : " || rvalue * (180 / &pi) || " " || rtemp * (180 / &pi) )
+			temp_point := rpoint(x,y, rx,ry)
+			put(returndata,temp_point)
+			templist := processTree(rx, ry, glength * gfactor,gfactor, rtemp - (&pi / 2), datalist,iter+1,outputfile)
+			
+			while temp_point := pop(templist) do {
+				put(returndata, temp_point)
+			}
+		}
+	}
+	
+	return returndata
+end
+
+procedure writedata(pointlist)
+	every ele := pointlist[1 to *pointlist] do {
+		DrawLine(ele.x,ele.y,ele.px,ele.py)
+	}
+end
+
+procedure main()
+	WOpen("size="||Width||","||Height)
+	
+	iter_x := origin_x
+	iter_y := origin_y
+	
+	inputfile := open("gcdTree.in") | stop("input file bad")
+	line := read(inputfile)
+	WWrite(line)
+	inputlist := []
+	line ? {
+		while put(inputlist,tab(upto(' '))) do {
+			WWrite(tab(many(' ' )))
+		}
+		# add last element if line does not end with a space
+		ele := tab(0)
+		if ele == "" then
+			put(inputlist, tab(0))
+	}
+	
+	outputfile := open("gcdTree.out","c") | stop("output file bad")
+	dataTree := processTree(origin_x, origin_y, 70,.5, 0,inputlist, 1, outputfile) |
+		stop("Error: please check your data")
+	every writedata(dataTree)
+	
+	WDone()
+end

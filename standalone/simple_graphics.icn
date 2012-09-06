@@ -1,0 +1,12 @@
+link graphics
+
+procedure main()
+	#WOpen("size=500,500")
+	
+	WOpen("image=images/leaf.gif") | stop("*** something is not right")
+	WOpen("image=images/mainbranch.gif") | stop("*** something is not right")
+	WOpen("image=images/stem.gif") | stop("*** something is not right")
+	
+	
+	WDone()
+end

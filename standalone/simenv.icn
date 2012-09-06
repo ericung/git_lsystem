@@ -1,0 +1,95 @@
+link graphics
+
+# a unit
+record term_point(x,y,px,py,glength,gfactor,perp,iter,outputfile)
+
+$define Width	800
+$define Height	800
+$define origin_x	Width / 2
+$define origin_y	Height / 2
+
+# a single line processed for each recursion
+procedure lbrancha(t_pt,datalist)
+	# the data list to be returned
+	ret_data := []
+	
+	# extract data from the term_point structure
+	iter := t_pt.iter
+	perp := t_pt.perp
+	x := t_pt.x
+	y := t_pt.y
+	glength := t_pt.glength
+	gfactor := t_pt.gfactor
+	outputfile := t_pt.outputfile
+	
+	# is the list of points over?
+	if iter <= *datalist then {
+	
+		ele := datalist[iter]
+		rvalue := (&pi) / (ele + 1)
+		
+		# iterate for each element
+		every i := 1 to ele do {
+			rtemp := rvalue * i + perp
+			rx := x + glength * cos(rtemp)
+			ry := y - glength * sin(rtemp)
+			
+			write(outputfile, x || " " || y || " -> " || rx || " " || ry || " : " || rvalue * (180 / &pi) || " " || rtemp * (180 / &pi))
+			
+			# make a point
+			rpoint := term_point(rx,ry,x,y,glength * gfactor,gfactor,rtemp - (&pi / 2),iter+1,outputfile)
+			
+			# put some element into the list
+			put(ret_data, rpoint)
+			templist := lbrancha(rpoint, datalist)
+			
+			# recursively fold from previous
+			while rpoint := pop(templist) do {
+				put(ret_data, rpoint)
+				
+			}
+		}
+	}
+	
+	return ret_data
+end
+
+procedure writedata(pointlist)
+	every ele := pointlist[1 to *pointlist] do {
+		DrawLine(ele.px,ele.py,ele.x,ele.y)
+	}
+end
+
+procedure main()
+	WOpen("size="||Width||","||Height)
+	
+	# stop initial points, later to be important
+	iter_x := origin_x
+	iter_y := origin_y
+	
+	# read input. All input files must end with space
+	inputfile := open("simenv.in") | stop("input file bad")
+	line := read(inputfile)
+	WWrite(line)
+	inputlist := []
+	line ? {
+		while put(inputlist,tab(upto(' '))) do {
+			WWrite(tab(many(' ' )))
+		}
+	}
+	
+	# make output file ready
+	outputfile := open("simenv.out","c") | stop("output file bad")
+	
+	# make a structure to store information
+	trecord := term_point(origin_x,origin_y,0,0,70,.5,0,1,outputfile)
+	
+	# execute procedure
+	dataTree := lbrancha(trecord,inputlist) |
+		stop("Error: please check your data")
+		
+	# interpret data and make a graphic
+	every writedata(dataTree)
+	
+	WDone()
+end

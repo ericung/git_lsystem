@@ -1,0 +1,29 @@
+#  Figure 8.1: A Drawn Image
+
+
+link graphics
+link random
+
+procedure main()
+   local sphere, x, y
+
+   WOpen("size=500,300") | stop("*** cannot open window")
+
+   randomize()
+
+   sphere := "16,g16, FFFFB98788AEFFFF" ||
+      "FFD865554446AFFF FD856886544339FF E8579BA9643323AF" ||
+      "A569DECA7433215E 7569CDB86433211A 5579AA9643222108" ||
+      "4456776533221007 4444443332210007 4333333222100008" ||
+      "533322221100000A 822222111000003D D41111100000019F" ||
+      "FA200000000018EF FFA4000000028EFF FFFD9532248BFFFF"
+   
+   every x := 20 to 460 by 20 do {
+      y := 290
+      every 1 to ?17 do
+         DrawImage(x, y -:= 16, sphere)
+      }
+
+   WDone()
+
+end

@@ -1,0 +1,12 @@
+link graphics
+
+procedure main()
+
+	WOpen("size=500,500")
+	
+	ReadImage("images/leaf.gif",250-(96/2),250-(96/2))
+	Zoom(250-(96/2),250(96/2),96,96,230-(96/2),230-(96/2),96,96)
+	
+	WDone()
+	
+end

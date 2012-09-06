@@ -1,0 +1,55 @@
+
+record diquo(q,k)
+
+procedure gcd(b,a, recursionList)
+	if b = 0 then {
+		return recursionList
+	}
+	else{
+		modulo := a % b
+		divisor := (a - modulo) / b
+		
+		data := diquo(b, divisor)
+		put(recursionList, data)
+		
+		return gcd (modulo, b, recursionList)
+	}
+end
+
+procedure writegcd(b, a)
+	branches := gcd (b, a, [])
+	
+	write("== ", b, " - ", a, " ==")
+	while ele := pop(branches) do{
+		write( ele.q, " ", ele.k)
+	}
+end
+
+procedure testinglocal(datalist)
+	pop(datalist)
+end 
+
+procedure main()
+	#writegcd(527, 765)
+	#writegcd(361, 1178)
+	#writegcd(299, 481)
+	#writegcd(129, 301)
+	#writegcd(8658, 12321)
+	#writegcd(156, 1740)
+	#writegcd(132073, 399321)
+	#writegcd(131351397,150318307)
+	
+	every i := 1 to 17 do {
+		#writegcd(i, 17)
+	}
+	
+	l := [1, 35, 2]
+	j := [3, 5, 2]
+	while ele := pop(j) do {
+		testinglocal(j)
+		put(l,ele)
+	}
+	
+	every write(l[1 to *l])
+	
+end

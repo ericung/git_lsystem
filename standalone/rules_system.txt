@@ -1,0 +1,7 @@
+#Tree
+axiom:X
+angle:22.5
+length:3
+gener:1
+X->F
+F->FFffffF

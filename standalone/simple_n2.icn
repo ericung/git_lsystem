@@ -1,0 +1,20 @@
+#  Figure 8.1: A Drawn Image
+
+
+link graphics
+link random
+
+procedure main()
+   local sphere, x, y
+
+   WOpen("size=500,300") | stop("*** cannot open window")
+   
+   every x := 20 to 460 by 20 do {
+      y := 290
+      every 1 to ?17 do
+         DrawImage(x, y, "20,#04AE")
+      }
+
+   WDone()
+
+end

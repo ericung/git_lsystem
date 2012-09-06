@@ -1,0 +1,24 @@
+procedure cube(x)
+	return x * x * x
+end
+
+procedure p(x)
+	write("p(" || x || "): " || (3*x) - ( 4 * cube(x)))
+	return (3*x) - ( 4 * cube(x))
+end
+
+procedure sine(angle)
+	if (abs(angle) <= 01) then {
+		return angle
+	}
+	else {
+		write(angle)
+		return p(sine(angle / 3.0))
+	}
+end
+
+procedure main()
+	write("Calculating: ", sine(20000))
+end
+
+# what is it's runtime?

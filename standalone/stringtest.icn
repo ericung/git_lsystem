@@ -1,0 +1,11 @@
+procedure main()
+	stringy := "23 21 95 32"
+	
+	stringy ? {
+		while write(tab(upto(' '))) do {
+			tab(many(' '))
+		}
+		write(tab(0))
+	}
+	write(stringy)
+end
