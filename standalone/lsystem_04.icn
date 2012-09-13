@@ -1,0 +1,93 @@
+link turtle
+link graphics
+
+$define Width	800
+$define Height	800
+
+# T_x:, T_y:, T_deg: functions not working properly
+procedure lindgen(c,rewrite,gener)
+	local s
+	
+	if gener = 0 then return c
+	else if s := \rewrite[c] then suspend lindgen(!s,rewrite,gener-1)
+	else return c
+end
+
+procedure  T_init()
+	initial {
+		if /&window then
+			WOpen("width="||Width,"height="||Height)|
+				stop("*** cannot open window")
+		T_stack := []
+		#T_x := x
+		#T_y := y
+		#T_deg := -90
+	}
+	
+	return
+end
+
+procedure main()
+	local rewrite, line, keyword, value, c, current_string, new_string
+	local axiom, angle, length, gener
+	
+	write(T_x)
+	rewrite := table()
+	
+	#	Read the grammar
+	fileInput := open("rules_system.txt")
+	while (line := read(fileInput))  do {
+		line ? {
+			if c := tab(find("->"))then{
+				move(2)
+				rewrite[c] := tab(0)
+			}
+			else if keyword := tab(find(":"))then{
+				move(1)
+				value := tab(0)
+				case keyword of{
+					"axiom":	axiom := value 
+					"angle":	angle := real(value)|stop("*** invalid line: ",line)
+					"length":	length := real(value)|stop("*** invalid line: ",line)
+					"gener":	gener := integer(value)|stop("*** invalid line: ",line)
+					#"T_x":		T_x := real(value)|stop("*** invalid line: ",line)
+					#"T_y":		T_y := real(value)|stop("*** invalid line: ",line)
+					#"T_deg":	T_deg := real(value)|stop("*** invalid line: ",line)
+					"default":	stop("*** erroneous keyword: ", line)
+				}
+			}
+			else if tab(find("#")) then{
+				# do nothing
+			}
+			else if tab(find("")) then{
+				# do nothing
+			}
+			else stop("*** invalid line: ",line)
+		}
+	}
+	
+	# Check values
+	/length := 5
+	/gener := 3
+	/T_x := Width/2 + 0.5
+	/T_y := Height/2 + 0.5
+	/T_deg := -90
+	if /axiom then stop("*** no axiom specified")
+	if /angle then stop("*** no angle specified")
+	
+	T_init()
+	
+	# Draw
+	every c := lindgen(!axiom,rewrite,gener) do { #interpret string
+		case c of {
+			"F":	TDraw(length)
+			"f":	TSkip(length)
+			"+":	TRight(angle)
+			"-":	TLeft(angle)
+			"[":	TSave()
+			"]":	TRestore()
+		}
+	}
+	
+	WQuit()
+end
