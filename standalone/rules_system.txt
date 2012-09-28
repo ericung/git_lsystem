@@ -1,7 +1,41 @@
 #Tree
+#axiom:X
+#angle:25
+#length:.025
+#gener:13
+#X->F-[[X]+X]+F[+FX]-X
+#F->FF
+#
+#10 generations
+#real	0m18.150s
+#user	0m15.857s
+#sys	0m1.916s
+#
+#11 generations
+#real	1m14.772s
+#user	1m5.820s
+#sys	0m7.304s
+#
+#12 generations
+#real	19m25.160s
+#user	17m18.393s
+#sys	1m52.075s
+
+
+#Two-Split
+#axiom:X
+#angle:15
+#length:20
+#gener:6
+#X->F
+#F->F[-F][+F]
+
+
+#Two-phase
 axiom:X
-angle:22.5
-length:3
-gener:1
-X->F
-F->FFffffF
+angle:35
+length:30
+gener:4
+X->A
+A->AF[+AF][-AF]
+F->F[+F][-F]
