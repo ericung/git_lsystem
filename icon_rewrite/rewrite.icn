@@ -1,0 +1,15 @@
+procedure generatesphere()
+#	every i = 1 to 10
+end
+
+procedure main()
+	outputfile := open("rewrite.wrl","c") | stop("output file bad")
+	
+	header := "#VRML V2.0 utf8\n"
+	sphere1 := "Transform {\ntranslation 0 2 0\nchildren [\nShape {\ngeometry Sphere {}\n}]}\n"
+	sphere2 := "Transform {\ntranslation 0 10 0\nchildren [\nShape {\ngeometry Sphere {}\n}]}\n"
+	
+		
+	write(outputfile, header || sphere1 || sphere2) 
+
+end
