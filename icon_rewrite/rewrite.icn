@@ -1,5 +1,23 @@
 procedure generatesphere()
-#	every i = 1 to 10
+	text := ""
+	every i := 1 to 10 do {
+		text := text || "Transform {\ntranslation " || i || " " || i || " "
+		text := text || i || "\nchildren [\nShape {\ngeometry Sphere{}\n}]}\n"
+	}
+
+	return text
+end
+
+procedure lindenGener(c,rewrite,gener)
+	local s
+	
+	#\ operator works as a default operator
+	if gener = 0 then return c
+	else if s := \"tttt" then {
+		write(s)
+		suspend lindgen(!s,"tt",gener-1)
+	}
+	else return c 
 end
 
 procedure main()
@@ -8,8 +26,10 @@ procedure main()
 	header := "#VRML V2.0 utf8\n"
 	sphere1 := "Transform {\ntranslation 0 2 0\nchildren [\nShape {\ngeometry Sphere {}\n}]}\n"
 	sphere2 := "Transform {\ntranslation 0 10 0\nchildren [\nShape {\ngeometry Sphere {}\n}]}\n"
+
+	lindenGener("tt","tt",5)
 	
 		
-	write(outputfile, header || sphere1 || sphere2) 
+	write(outputfile, header || sphere1 || sphere2 || generatesphere()) 
 
 end
