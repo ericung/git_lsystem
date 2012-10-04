@@ -1,0 +1,4 @@
+need to write a generator that computes the next
+series of words
+
+
