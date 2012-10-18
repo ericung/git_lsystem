@@ -1,0 +1,69 @@
+link strings
+
+procedure generate(str,rules)
+	retstr := ""
+	str ? {
+		while (c := move(1)) do {
+			retstr ||:= rules[c]
+		}
+	}
+
+	return retstr
+end
+
+procedure findmax(str1,str2)
+	if (*str1 > *str2) then {
+		return str1
+	}
+	return str2
+end
+
+procedure negate(str1, str2)
+	retstr := ""
+	if (*str1 > *str2) then {
+		retstr := deletes(str1, str2)
+	} else {
+		retstr := deletes(str1,str2)
+	}
+
+	return retstr
+end
+
+procedure longestcommonsubstr(str1,str2)
+	
+end
+
+procedure downtotwo(image1, image2)
+	item := ""
+
+	if (findmax(image1,image2) == image2) then {
+		item := image1
+		image1 := image2
+		image2 := item
+	}
+
+	item := deletes(image1,image2)
+	if (*deletes(image2,item) == *image2) then {
+		write ("first rule: ", image1)
+		write ("second rule: ", image2)
+	} else {
+		downtotwo(image2,item)
+	}
+	
+end
+
+procedure main()
+	rules := table()
+	gen := table()
+	rules["a"] := "a"
+	rules["b"] := "ab"
+	axiom := "ab"
+	gen[0] := axiom 
+	write("starting\t", str, "\n\n")
+	every (i := 1 to 10) do{ 
+		gen[i] := generate(gen[i-1],rules)
+		write(i, ": ", gen[i], "\n")
+	} 
+
+	write("negating: ", downtotwo(gen[10], gen[9]))
+end
