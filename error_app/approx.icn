@@ -29,8 +29,67 @@ procedure negate(str1, str2)
 	return retstr
 end
 
-procedure longestcommonsubstr(str1,str2)
+procedure printLCS(b,X,i,j,retstr)
+	if (i == 0 | j == 0) then {
+		return retstr
+	}
+	if (b[i][j] == "upright") then {
+		return printLCS(b,X,i-1,j-1,X[i]||retstr)
+	} else if (b[i][j] == "up") then {
+		return printLCS(b,X,i-1,j,retstr)
+	} else {
+		return printLCS(b,X,i,j-1,retstr)
+	}
+end
+
+procedure lngsubstr(str1,str2)
+	m := *str1
+	n := *str2
+	# make a b and c table
+	b := table()
+	c := table()
+
+	#    nnnnnn
+	#  i 01...n
+	#  j
+	#m=0
+	#m=1
+	#m.
+	#m.
+	#m.
+	#m=m
+	every (i := 1 to m) do {
+		# initial array
+		b[i] := table()
+		c[i] := table()
+
+		# reduce reduncancy for c
+		c[i][0] := 0
+	}
 	
+	# c table has another row initial
+	c[0] := table()
+	every (j := 0 to n) do {
+		c[0][j] := 0
+	}
+	
+
+	every (i := 1 to m) do {
+		every (j := 1 to n) do {
+			if (str1[i] == str2[j]) then{
+				c[i][j] := c[i-1][j-1] + 1
+				b[i][j] := "upright"
+			} else if (c[i-1][j] >= c[i][j-1]) then {
+				c[i][j] := c[i-1][j]
+				b[i][j] := "up"
+			} else {
+				c[i][j] := c[i][j-1]
+				b[i][j] := "right"
+			}
+		}
+	}
+
+	return printLCS(b,str1,*str1,*str2,"")
 end
 
 procedure downtotwo(image1, image2)
@@ -41,8 +100,9 @@ procedure downtotwo(image1, image2)
 		image1 := image2
 		image2 := item
 	}
-
-	item := deletes(image1,image2)
+	
+	lngest := lngsubstr(image1,image2)
+	item := deletes(image2,lngest)
 	if (*deletes(image2,item) == *image2) then {
 		write ("first rule: ", image1)
 		write ("second rule: ", image2)
@@ -55,15 +115,16 @@ end
 procedure main()
 	rules := table()
 	gen := table()
-	rules["a"] := "a"
-	rules["b"] := "ab"
+	rules["a"] := "ab"
+	rules["b"] := "a"
 	axiom := "ab"
 	gen[0] := axiom 
-	write("starting\t", str, "\n\n")
+	write("starting: ", axiom)
 	every (i := 1 to 10) do{ 
 		gen[i] := generate(gen[i-1],rules)
-		write(i, ": ", gen[i], "\n")
+		#write(i, ": ", gen[i])
 	} 
-
-	write("negating: ", downtotwo(gen[10], gen[9]))
+	
+	write("\n",gen[10], "\n\n",gen[7], "\n")
+	write("negating: ", downtotwo(gen[10], gen[6]))
 end
