@@ -18,78 +18,38 @@ procedure findmax(str1,str2)
 	return str2
 end
 
-procedure negate(str1, str2)
-	retstr := ""
-	if (*str1 > *str2) then {
-		retstr := deletes(str1, str2)
-	} else {
-		retstr := deletes(str1,str2)
-	}
-
-	return retstr
-end
-
-procedure printLCS(b,X,i,j,retstr)
-	if (i == 0 | j == 0) then {
-		return retstr
-	}
-	if (b[i][j] == "upright") then {
-		return printLCS(b,X,i-1,j-1,X[i]||retstr)
-	} else if (b[i][j] == "up") then {
-		return printLCS(b,X,i-1,j,retstr)
-	} else {
-		return printLCS(b,X,i,j-1,retstr)
-	}
-end
-
-procedure lngsubstr(str1,str2)
+procedure longsubstr(str1,str2)
 	m := *str1
 	n := *str2
-	# make a b and c table
-	b := table()
-	c := table()
-
-	#    nnnnnn
-	#  i 01...n
-	#  j
-	#m=0
-	#m=1
-	#m.
-	#m.
-	#m.
-	#m=m
-	every (i := 1 to m) do {
-		# initial array
-		b[i] := table()
-		c[i] := table()
-
-		# reduce reduncancy for c
-		c[i][0] := 0
+	l := table()
+	every(i := 0 to m) do{
+		l[i] :=  table()
+		l[i][0] := 0
+	}	
+	every(i := 0 to n)do{
+		l[0][i] := 0
 	}
-	
-	# c table has another row initial
-	c[0] := table()
-	every (j := 0 to n) do {
-		c[0][j] := 0
-	}
-	
 
-	every (i := 1 to m) do {
-		every (j := 1 to n) do {
-			if (str1[i] == str2[j]) then{
-				c[i][j] := c[i-1][j-1] + 1
-				b[i][j] := "upright"
-			} else if (c[i-1][j] >= c[i][j-1]) then {
-				c[i][j] := c[i-1][j]
-				b[i][j] := "up"
+	z := 0
+	ret := ""
+	every(i := 1 to m) do {
+		every(j := 1 to n) do {
+			if (str1[i]==str2[j]) then{
+				if ((i==1)|(j==1))then{
+					l[i][j] := 1
+				} else {
+					l[i][j] := l[i-1][j-1]+1
+				}
+				if (l[i][j] > z) then{
+					z := l[i][j]
+					ret := str1[i-z+1:i+1]
+				}
 			} else {
-				c[i][j] := c[i][j-1]
-				b[i][j] := "right"
+				l[i][j] := 0
 			}
 		}
-	}
-
-	return printLCS(b,str1,*str1,*str2,"")
+	}	
+	return ret
 end
 
 procedure downtotwo(image1, image2)
@@ -100,14 +60,17 @@ procedure downtotwo(image1, image2)
 		image1 := image2
 		image2 := item
 	}
-	
-	lngest := lngsubstr(image1,image2)
-	item := deletes(image2,lngest)
-	if (*deletes(image2,item) == *image2) then {
-		write ("first rule: ", image1)
-		write ("second rule: ", image2)
+
+	long := longsubstr(image1,image2)
+	#1del := deletes(image2,long)
+	del := long
+	write(image1, "\t",image2,"\t",del)
+	if (*del == 1) then {
+		write ("first rule: ", image2)
+		write ("second rule: ", del)
 	} else {
-		downtotwo(image2,item)
+		write(long, "\t",image2)
+		downtotwo(image2,del)
 	}
 	
 end
@@ -115,16 +78,17 @@ end
 procedure main()
 	rules := table()
 	gen := table()
-	rules["a"] := "ab"
+	rules["a"] := "aba"
 	rules["b"] := "a"
-	axiom := "ab"
+	axiom := "ba"
 	gen[0] := axiom 
 	write("starting: ", axiom)
 	every (i := 1 to 10) do{ 
 		gen[i] := generate(gen[i-1],rules)
-		#write(i, ": ", gen[i])
 	} 
 	
-	write("\n",gen[10], "\n\n",gen[7], "\n")
-	write("negating: ", downtotwo(gen[10], gen[6]))
+	write("\n",gen[5], "\n\n",gen[4], "\n")
+	write("negating: ", downtotwo(gen[6], gen[5]))
+#	write("gc",gc := longsubstr(gen[2],gen[1]))
+#	write(deletes(gen[2],gc))
 end
