@@ -1,0 +1,15 @@
+message: "If you want to cite this article, please cite it as below."
+authors:
+- family-names: "Eric"
+  given-names: "Ung"
+  orcid: "https://orcid.org/0009-0008-6122-4557"
+title: "git_lsystem"
+url: "https://github.com/ericung/git_lsystem"
+preferred-citation:
+  type: article
+  url: "https://github.com/ericung/git_lsystem"
+  authors:
+  - family-names: "Ung"
+    given-names: "Eric"
+    orcid: "https://orcid.org/0009-0008-6122-4557"
+  title: "git_lsystem"
